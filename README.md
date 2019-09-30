@@ -34,7 +34,7 @@ class Commentaire(models.Model):
     """Model definition for Commentaire."""
 
     description = models.TextField()
-    article_id = models.ForeingnKey('Article', on_delete=models.CASCADE, related_name='article_comment')
+    article_id = models.ForeingKey('Article', on_delete=models.CASCADE, related_name='article_comment')
     statut = models.BooleanField(default = True)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -76,10 +76,10 @@ class Plat(models.Model):
     """Model definition for Plat."""
 
     ingredients = models.CharField(max_length=255)
-    nom = models.CharField(, max_length=50)
+    nom = models.CharField(max_length=50)
     prix = models.IntegerField()
     image = models.ImageField(upload_to='post')
-    category_id = models.ForeingnKey('Category_plat', on_delete=models.CASCADE, related_name='cat_plat')
+    category_id = models.ForeignKey('Category_plat', on_delete=models.CASCADE, related_name='cat_plat')
     statut = models.BooleanField(default = False)
     date_add = models.DateTimeField(auto_now_add= True)
     date_update = models.DateTimeField(auto_now= True)
@@ -169,12 +169,12 @@ class Reservation(models.Model):
     email = models.EmailField(max_length=254)
     numero = models.CharField(max_length=255)
     heure_reserv = models.TimeField(auto_now=True, auto_now_add=True)
-    date_reserv = models.DateField(, auto_now=True, auto_now_add=True)
+    date_reserv = models.DateField(auto_now=True, auto_now_add=True)
     nbr_personne = models.IntegerField()
     livraison = models.BooleanField(default=True)
     emporter = models.BooleanField(default=True)
     mode_paiement = models.CharField(max_length=255)
-    panier_id = models.ForeingnKey('Panier', on_delete=models.CASCADE, related_name='panier_reserv')
+    panier_id = models.ForeignKey('Panier', on_delete=models.CASCADE, related_name='panier_reserv')
     nom_resto = models.CharField(max_length=255)
     statut = models.BooleanField(default = False)
     date_add = models.DateTimeField(auto_now_add= True)
@@ -300,6 +300,33 @@ class ContactInfo(models.Model):
     def __str__(self):
         """Unicode representation of ContactInfo."""
         return self.titre
+
+class Panier(models.Model):
+    """Model definition for Panier."""
+
+    item_id = models.ForeignKey('Items_panier', on_delete=models.CASCADE, related_name='items_panier')
+
+    class Meta:
+        """Meta definition for Panier."""
+
+        verbose_name = 'Panier'
+        verbose_name_plural = 'Paniers'
+
+class Items_panier(models.Model):
+    """Model definition for Items_panier."""
+
+    plat_id = models.ForeignKey('Plat', on_delete=models.CASCADE, related_name='plat_item')
+    quantite = models.IntegerField()
+    prix_unitaire = models.IntegerField()
+    prix_total = models.IntegerField()
+
+    class Meta:
+        """Meta definition for Items_panier."""
+
+        verbose_name = 'Items_panier'
+        verbose_name_plural = 'Items_paniers'
+
+
 
 
   ```
